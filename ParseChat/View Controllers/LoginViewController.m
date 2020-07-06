@@ -39,6 +39,7 @@
                 NSLog(@"User logged in successfully with username: %@", user.username);
                 
                 // display view controller that needs to shown after successful login
+                [self performSegueWithIdentifier:@"loginSegue" sender:nil];
             }
         }];
     }
@@ -65,6 +66,7 @@
                 NSLog(@"User registered successfully with username: %@", newUser.username);
                 
                 // manually segue to logged in view
+                [self performSegueWithIdentifier:@"loginSegue" sender:nil];
             }
         }];
     }
