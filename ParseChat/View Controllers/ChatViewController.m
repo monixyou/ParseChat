@@ -36,6 +36,7 @@
 - (void)refreshMessages {
     // construct query
     PFQuery *query = [PFQuery queryWithClassName:@"Message_fbu2020"];
+    [query includeKey:@"user"];
     [query orderByDescending:@"createdAt"];
     query.limit = 20;
 
@@ -77,6 +78,16 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ChatCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChatCell"];
     cell.incomingMessageLabel.text = self.incomingMessages[indexPath.row][@"text"];
+    
+    PFUser *user = self.incomingMessages[indexPath.row][@"user"];
+    if (user != nil) {
+        // User found! update username label with username
+        cell.usernameLabel.text = user.username;
+    } else {
+        // No user found, set default username
+        cell.usernameLabel.text = @"🤖";
+    }
+    
     return cell;
 }
 
