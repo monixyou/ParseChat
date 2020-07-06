@@ -35,7 +35,7 @@
 
 - (void)refreshMessages {
     // construct query
-    PFQuery *query = [PFQuery queryWithClassName:@"Message_fbu2019"];
+    PFQuery *query = [PFQuery queryWithClassName:@"Message_fbu2020"];
     [query orderByDescending:@"createdAt"];
     query.limit = 20;
 
@@ -43,25 +43,24 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *messages, NSError *error) {
         if (messages != nil) {
             // do something with the array of object returned by the call
-            NSLog(@"%@", messages);
             self.incomingMessages = messages;
             [self.tableView reloadData];
         } else {
             NSLog(@"%@", error.localizedDescription);
         }
     }];
-    
-    
 }
 
 - (IBAction)didTapSend:(id)sender {
     PFObject *chatMessage = [PFObject objectWithClassName:@"Message_fbu2020"];
 
     chatMessage[@"text"] = self.messageField.text;
+    chatMessage[@"user"] = PFUser.currentUser;
     
     [chatMessage saveInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
         if (succeeded) {
             NSLog(@"Success! Sent message: %@", chatMessage[@"text"]);
+            [self.tableView reloadData];
             self.messageField.text = @"";
         } else {
             NSLog(@"Problem saving message: %@", error.localizedDescription);
